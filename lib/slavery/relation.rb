@@ -11,11 +11,11 @@ class ActiveRecord::Relation
   end
 
   # Supports queries like User.on_slave.count
-  def calculate_with_slavery(operation, column_name, options = {})
+  def calculate_with_slavery(operation, column_name)
     if slavery_target == :slave
-      Slavery.on_slave { calculate_without_slavery(operation, column_name, options) }
+      Slavery.on_slave { calculate_without_slavery(operation, column_name) }
     else
-      calculate_without_slavery(operation, column_name, options)
+      calculate_without_slavery(operation, column_name)
     end
   end
 
