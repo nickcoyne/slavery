@@ -1,24 +1,25 @@
-class ActiveRecord::Relation
+module WithSlavery
   attr_accessor :slavery_target
 
   # Supports queries like User.on_slave.to_a
-  def exec_queries_with_slavery
+  def exec_queries
     if slavery_target == :slave
-      Slavery.on_slave { exec_queries_without_slavery }
+      Slavery.on_slave { super }
     else
-      exec_queries_without_slavery
+      super
     end
   end
 
   # Supports queries like User.on_slave.count
-  def calculate_with_slavery(operation, column_name, options = {})
+  def calculate(operation, column_name)
     if slavery_target == :slave
-      Slavery.on_slave { calculate_without_slavery(operation, column_name, options) }
+      Slavery.on_slave { super(operation, column_name) }
     else
-      calculate_without_slavery(operation, column_name, options)
+      super(operation, column_name)
     end
   end
+end
 
-  alias_method_chain :exec_queries, :slavery
-  alias_method_chain :calculate, :slavery
+class ActiveRecord::Relation
+  prepend WithSlavery
 end
