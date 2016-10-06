@@ -10,8 +10,8 @@ module Slavery
     require 'slavery/relation'
 
     class << self
-      alias_method :slavery, :connection
-      alias_method :connection, :slavery
+      alias_method :connection_without_slavery, :connection
+      alias_method :connection, :connection_with_slavery
     end
   end
 
